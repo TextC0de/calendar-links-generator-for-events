@@ -2,7 +2,4 @@ node_modules
 .vscode
 .env.prod
 
-public/*
-
-!public/uploads/.keep
-public/uploads/*
+public
