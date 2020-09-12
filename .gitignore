@@ -4,7 +4,7 @@ node_modules
 
 public/*
 
-server-build
+server-build/
 
 !public/uploads
 public/uploads/*
