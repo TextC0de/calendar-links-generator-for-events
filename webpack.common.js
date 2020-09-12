@@ -4,6 +4,9 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+
+const env = process.env.NODE_ENV;
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
@@ -22,6 +25,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'styles.css',
             chunkFilename: '/styles/[id].css'
+        }),
+        new Dotenv({
+            path: `./.env.${env === 'production' ? 'prod' : 'dev'}`
         })
     ],
     module: {

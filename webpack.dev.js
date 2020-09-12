@@ -14,6 +14,8 @@ module.exports = merge(common, {
         hot: true,
         port: 3000,
         publicPath: '/',
-        host: '0.0.0.0'
+        host: '0.0.0.0',
+        historyApiFallback: true,
+        stats: { colors: true }
     }
 });

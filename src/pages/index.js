@@ -1,4 +1,5 @@
 import React, { useState, useReducer } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { google, outlook, office365, yahoo, ics } from 'calendar-link';
 import Container from 'react-bootstrap/Container';
@@ -7,7 +8,9 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 import DateTimePicker from 'react-datetime-picker';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { reducer, initialState, actions } from '../reducers/form';
 import CalendarLink from '../components/CalendarLink';
 
@@ -18,6 +21,10 @@ const LinksSection = styled.section`
 `;
 
 const IndexPage = () => {
+    const [icsLink, setIcsLink] = useState();
+    const [creatingIcs, setCreatingIcs] = useState(false);
+    const [icsWasCreated, setIcsWasCreated] = useState(false);
+    const [icsCreationError, setIcsCreationError] = useState(null);
     const [startDate, onStartDateChange] = useState(new Date());
     const [endDate, onEndDateChange] = useState(new Date());
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -57,13 +64,49 @@ const IndexPage = () => {
             url: undefined
         };
 
+        const originalIcs = ics(event);
+        let customIcs = originalIcs.substring(32, originalIcs.length).replace(/%0A/gm, '\r\n');
+
+        if (!state.url) {
+            customIcs = customIcs.replace(/URL.*/g, '').replace(/^\s*[\r\n]/gm, '');
+        }
+
+        const icsFile = new Blob([customIcs], {
+            type: 'text/calendar;charset=UTF-8',
+            encoding: 'UTF-8'
+        });
+
+        setCreatingIcs(true);
+        const formData = new FormData();
+        formData.append('ics', icsFile, `${state.title}.ics`);
+        console.log(process.env);
+
+        axios
+            .post(`http://${process.env.REACT_APP_SERVER_HOST}/ics/file`, formData, {
+                headers: {
+                    'content-type': 'text/calendar'
+                }
+            })
+            .then((response) => {
+                setIcsLink(
+                    `http://${process.env.REACT_APP_SERVER_HOST}/ics/uploads/${response.data}`
+                );
+                setIcsWasCreated(true);
+            })
+            .catch((error) => {
+                setIcsCreationError(error);
+            })
+            .finally(() => {
+                setCreatingIcs(false);
+            });
+
         dispatch(
-            actions.setGeneratedLinks({
+            actions.setGeneratedLinksAndIcsFile({
                 google: google(event),
                 outlook: outlook(event),
                 office365: office365(event),
                 yahoo: yahoo(event),
-                ics: ics(event)
+                ics: icsFile
             })
         );
     };
@@ -73,21 +116,8 @@ const IndexPage = () => {
     };
 
     const onDownloadIcsClick = () => {
-        let downloadableICS = state.links.ics
-            .substring(32, state.links.ics.length)
-            .replace(/%0A/gm, '\r\n');
-
-        if (!state.url) {
-            downloadableICS = downloadableICS.replace(/URL.*/g, '').replace(/^\s*[\r\n]/gm, '');
-        }
-
         const element = document.createElement('a');
-        const file = new Blob([downloadableICS], {
-            type: 'text/calendar;charset=UTF-8',
-            encoding: 'UTF-8'
-        });
-
-        element.href = URL.createObjectURL(file);
+        element.href = URL.createObjectURL(state.icsFile);
         element.download = `${state.title}.ics`;
         document.body.appendChild(element);
         element.click();
@@ -235,6 +265,51 @@ const IndexPage = () => {
                                         >
                                             Descargar ICS
                                         </Button>
+                                        {'  '}
+
+                                        {icsWasCreated && (
+                                            <div style={{ display: 'inline-block' }}>
+                                                <CopyToClipboard
+                                                    text={icsLink}
+                                                    onCopy={() => onGeneratedLinkCopy('ics')}
+                                                >
+                                                    <Button variant="outline-primary" size="sm">
+                                                        <span>Copiar link al ICS</span>
+                                                    </Button>
+                                                </CopyToClipboard>
+                                                {'  '}
+                                                {state.copiedCalendar.toLowerCase() === 'ics' && (
+                                                    <small
+                                                        style={{
+                                                            textTransform: 'uppercase',
+                                                            fontWeight: 600,
+                                                            color: '#6c757d'
+                                                        }}
+                                                    >
+                                                        Copiado
+                                                    </small>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {creatingIcs && (
+                                            <Button variant="outline-primary" disabled>
+                                                <Spinner
+                                                    as="span"
+                                                    animation="border"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />{' '}
+                                                Creando link al ics...
+                                            </Button>
+                                        )}
+
+                                        {icsCreationError && (
+                                            <Alert className="text-center mt-3" variant="warning">
+                                                Hubo un error al crear el link al archivo .ics
+                                            </Alert>
+                                        )}
                                     </div>
                                 ) : (
                                     <span className="muted-text">

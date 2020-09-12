@@ -3,7 +3,7 @@ const actionTypes = {
     ON_FIELD_CHANGE: 'ON_FIELD_CHANGE',
     ON_TEXT_FIELD_CHANGE: 'ON_TEXT_FIELD_CHANGE',
     ON_ALL_DAY_CHANGE: 'ON_ALL_DAY_CHANGE',
-    SET_GENERATED_LINKS: 'SET_GENERATED_LINKS',
+    SET_GENERATED_LINKS_AND_ICS_FILE: 'SET_GENERATED_LINKS_AND_ICS_FILE',
     ON_LINK_COPY: 'ON_LINK_COPY'
 };
 
@@ -19,8 +19,7 @@ export const initialState = {
         google: '',
         outlook: '',
         office365: '',
-        yahoo: '',
-        ics: ''
+        yahoo: ''
     }
 };
 
@@ -44,11 +43,12 @@ export const reducer = (state, action) => {
             };
         case actionTypes.ON_ALL_DAY_CHANGE:
             return { ...state, allDay: action.payload.data };
-        case actionTypes.SET_GENERATED_LINKS:
+        case actionTypes.SET_GENERATED_LINKS_AND_ICS_FILE:
             return {
                 ...state,
                 copiedCalendar: '',
-                links: action.payload.data,
+                links: action.payload.links,
+                icsFile: action.payload.file,
                 linksWhereGenerated: true,
                 someFieldChanged: false
             };
@@ -79,17 +79,17 @@ const onLinkCopy = (linkName) => ({
     payload: { data: linkName }
 });
 
-const setGeneratedLinks = ({ google, outlook, office365, yahoo, ics }) => {
+const setGeneratedLinksAndIcsFile = ({ google, outlook, office365, yahoo, ics }) => {
     return {
-        type: actionTypes.SET_GENERATED_LINKS,
+        type: actionTypes.SET_GENERATED_LINKS_AND_ICS_FILE,
         payload: {
-            data: {
+            links: {
                 google,
                 outlook,
                 office365,
-                yahoo,
-                ics
-            }
+                yahoo
+            },
+            file: ics
         }
     };
 };
@@ -99,6 +99,6 @@ export const actions = {
     onFieldChange,
     onTextFieldChange,
     onAllDayChange,
-    setGeneratedLinks,
+    setGeneratedLinksAndIcsFile,
     onLinkCopy
 };

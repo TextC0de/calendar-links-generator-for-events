@@ -8,8 +8,7 @@ const CalendarLink = ({ className, calendarName, addToCalendarLink, copiedCalend
     <div className={className}>
         <small>
             <p style={{ marginBottom: '.5rem', lineBreak: 'anywhere' }}>
-                <b>{calendarName}:</b>
-                {addToCalendarLink}
+                <b>{calendarName}:</b> {addToCalendarLink}
             </p>
         </small>
         <CopyToClipboard text={addToCalendarLink} onCopy={onCopy}>
