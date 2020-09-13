@@ -65,14 +65,20 @@ const IndexPage = () => {
         };
 
         const originalIcs = ics(event);
+
         let customIcs = originalIcs.substring(32, originalIcs.length).replace(/%0A/gm, '\r\n');
+        customIcs = customIcs.replace(/^SUMMARY:.*/m, `SUMMARY:${state.title}\r\n`);
+        customIcs = customIcs.replace(/^DESCRIPTION:.*/m, `DESCRIPTION:${state.description}\r\n`);
+        customIcs = customIcs.replace(/^LOCATION:.*/m, `LOCATION:${state.location}\r\n`);
 
         if (!state.url) {
             customIcs = customIcs.replace(/URL.*/g, '').replace(/^\s*[\r\n]/gm, '');
         }
 
-        const icsFile = new Blob([customIcs], {
-            type: 'text/calendar;charset=UTF-8',
+        console.log('originalIcs', originalIcs);
+        console.log('customIcs', customIcs);
+        const icsFile = new Blob([new Uint8Array([0xef, 0xbb, 0xbf]), customIcs], {
+            type: 'text/calendar;charset=utf-8,%EF%BB%BF',
             encoding: 'UTF-8'
         });
 
@@ -80,11 +86,15 @@ const IndexPage = () => {
         setIcsCreationError(null);
         const formData = new FormData();
         formData.append('ics', icsFile, `${state.title}.ics`);
-
+        const myReader = new FileReader();
+        myReader.onload = (event) => {
+            console.log(JSON.stringify(myReader.result));
+        };
+        myReader.readAsText(icsFile);
         axios
             .post(`${process.env.SERVER_HOST}/ics/file`, formData, {
                 headers: {
-                    'content-type': 'text/calendar'
+                    'content-type': 'text/calendar;charset=utf-8'
                 }
             })
             .then((response) => {
