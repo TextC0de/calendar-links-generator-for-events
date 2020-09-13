@@ -39,4 +39,4 @@ npm run build
 npm start
 ```
 
-After build the application, you can start the application for production. Note that you must create a .env.production file in the root folder which must specify the SERVER_HOST variable.
+After build the application, you can start the application for production. Note that you must create a .env.production file in the root folder which must specify the SERVER_HOST and EXPRESS_PORT variables.
