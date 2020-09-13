@@ -82,13 +82,13 @@ const IndexPage = () => {
         formData.append('ics', icsFile, `${state.title}.ics`);
 
         axios
-            .post(`${process.env.HOST}:${process.env.PORT}/ics/file`, formData, {
+            .post(`${process.env.SERVER_HOST}/ics/file`, formData, {
                 headers: {
                     'content-type': 'text/calendar'
                 }
             })
             .then((response) => {
-                setIcsLink(`${process.env.HOST}:${process.env.PORT}/ics/file/${response.data}`);
+                setIcsLink(`${process.env.SERVER_HOST}/files/${response.data}`);
                 setIcsWasCreated(true);
             })
             .catch((error) => {
