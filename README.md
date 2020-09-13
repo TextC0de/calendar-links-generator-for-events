@@ -12,7 +12,7 @@ cd calendar-links-generator-for-events
 npm run install
 ```
 
-**Start the app**
+**Start the development app**
 
 ```bash
 npm run dev
@@ -28,3 +28,12 @@ npm run build
 
 this will build the app for production. The client build will be inside the client/build folder and the server build will be inside server/build folder.
 The express server saves the generated .ics files in the public folder, so that folder must exist for express to be able to save the files.
+
+
+**Start the production app**
+
+```bash
+npm run build
+npm start
+```
+After build the application, you can start the application for production. Note that you must create a .env.production file in the root folder which must specify the SERVER_HOST variable.
