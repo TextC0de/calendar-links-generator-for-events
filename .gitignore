@@ -2,5 +2,8 @@ node_modules
 .vscode
 .env.production
 
+public/*
+!public/.gitignore
+
 build/
 node_modules/
