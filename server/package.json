@@ -1,0 +1,32 @@
+{
+    "private": true,
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "NODE_ENV=development nodemon --exec babel-node ./src/server.js",
+        "build": "NODE_ENV=production babel ./src/ -x '.js'  --retain-lines -d ./build",
+        "start": "NODE_ENV=production node ./build/server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@babel/runtime": "^7.11.2",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.2",
+        "uuid": "^8.3.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.11.6",
+        "@babel/core": "^7.11.6",
+        "@babel/node": "^7.10.5",
+        "@babel/plugin-transform-runtime": "^7.11.5",
+        "@babel/preset-env": "^7.11.5",
+        "nodemon": "^2.0.4"
+    }
+}

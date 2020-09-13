@@ -6,7 +6,7 @@ import controller from '../controllers';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/uploads');
+        cb(null, path.join(__dirname, '../../../public'));
     },
     filename: (req, file, cb) => {
         const newFilename = `${uuidv4()}${path.extname(file.originalname)}`;

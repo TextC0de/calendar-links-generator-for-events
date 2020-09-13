@@ -1,21 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const TerserJSPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
-const env = process.env.NODE_ENV;
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'public')
-    },
-    optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+        path: path.resolve(__dirname, 'build')
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -27,7 +20,10 @@ module.exports = {
             chunkFilename: '/styles/[id].css'
         }),
         new Dotenv({
-            path: `./.env.${env === 'production' ? 'prod' : 'dev'}`
+            path: path.join(
+                __dirname,
+                `../.env.${process.env.NODE_ENV === 'production' ? 'production' : 'development'}`
+            )
         })
     ],
     module: {

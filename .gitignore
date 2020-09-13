@@ -1,10 +1,6 @@
 node_modules
 .vscode
-.env.prod
+.env.production
 
-server-build
-
-public/*
-!public/uploads
-public/uploads/*
-!public/uploads/.gitkeep
+build/
+node_modules/

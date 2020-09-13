@@ -77,20 +77,18 @@ const IndexPage = () => {
         });
 
         setCreatingIcs(true);
+        setIcsCreationError(null);
         const formData = new FormData();
         formData.append('ics', icsFile, `${state.title}.ics`);
-        console.log(process.env);
 
         axios
-            .post(`http://${process.env.REACT_APP_SERVER_HOST}/ics/file`, formData, {
+            .post(`${process.env.HOST}:${process.env.PORT}/ics/file`, formData, {
                 headers: {
                     'content-type': 'text/calendar'
                 }
             })
             .then((response) => {
-                setIcsLink(
-                    `http://${process.env.REACT_APP_SERVER_HOST}/ics/uploads/${response.data}`
-                );
+                setIcsLink(`${process.env.HOST}:${process.env.PORT}/ics/file/${response.data}`);
                 setIcsWasCreated(true);
             })
             .catch((error) => {
