@@ -4,6 +4,7 @@
     "description": "Create an event and get links to add it to your favorite calendar (Google, Outlook, Microsoft365, Yahoo) as well as an .ics file (for calendars like apple's). ",
     "main": "index.js",
     "scripts": {
+        "install": "concurrently \"npm i\" \"cd client && npm i\" \"cd server && npm i\"",
         "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
         "clean": "rimraf public/*.ics ./server/build ./client/build",
         "build": "concurrently \"npm run clean\" \"cd client && npm run build\" \"cd server && npm run build\"",

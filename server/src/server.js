@@ -18,11 +18,11 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use('/ics', icsRoutes);
-app.use('/ics/file', express.static(path.join(__dirname, '../../public')));
-app.use(express.static(path.join(__dirname, '../../public')));
+app.use('/files', express.static(path.join(__dirname, '../../public')));
+app.use('/', express.static(path.join(__dirname, '../../client/build')));
 
 if (process.env.NODE_ENV === 'production') {
-    app.get('/*', (req, res) => {
+    app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
     });
 }
