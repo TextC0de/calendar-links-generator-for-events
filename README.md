@@ -9,8 +9,13 @@ You will need `node` and `npm` installed globally on your machine.
 ```
 git clone https://github.com/TextC0de/calendar-links-generator-for-events.git
 cd calendar-links-generator-for-events
+npm install
 npm run install
 ```
+
+Note that you must first run ``` npm install ``` for install the concurrently package that will allow you to run ``` npm run install ```. This last command will install the client and server dependencies.
+Tenga en cuenta que primero debe ejecutar `` '' npm install `` '' para instalar el paquete `'concurrently'` que le permitirá ejecutar` `' 'npm run install` `' '. Este último comando instalará las dependencias del cliente y del servidor.
+Note that you must first run ``` npm install ``` to install the [concurrently package](https://www.npmjs.com/package/concurrently) which will allow you to run ``` npm run install ```. This last command will install the client and server dependencies.
 
 **Start the development app**
 
