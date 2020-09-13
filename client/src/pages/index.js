@@ -75,8 +75,8 @@ const IndexPage = () => {
             customIcs = customIcs.replace(/URL.*/g, '').replace(/^\s*[\r\n]/gm, '');
         }
 
-        const icsFile = new Blob([new Uint8Array([0xef, 0xbb, 0xbf]), customIcs], {
-            type: 'text/calendar;charset=utf-8,%EF%BB%BF',
+        const icsFile = new Blob([customIcs], {
+            type: 'text/calendar;charset=utf-8',
             encoding: 'UTF-8'
         });
 

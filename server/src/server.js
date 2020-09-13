@@ -29,6 +29,4 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(PORT, (err) => {
     if (err) throw err;
-    // eslint-disable-next-line no-console
-    console.log(`>>> Server runing on ${process.env.HOST}:${process.env.PORT}`);
 });
