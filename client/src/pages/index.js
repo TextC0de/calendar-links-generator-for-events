@@ -75,8 +75,6 @@ const IndexPage = () => {
             customIcs = customIcs.replace(/URL.*/g, '').replace(/^\s*[\r\n]/gm, '');
         }
 
-        console.log('originalIcs', originalIcs);
-        console.log('customIcs', customIcs);
         const icsFile = new Blob([new Uint8Array([0xef, 0xbb, 0xbf]), customIcs], {
             type: 'text/calendar;charset=utf-8,%EF%BB%BF',
             encoding: 'UTF-8'
@@ -86,11 +84,7 @@ const IndexPage = () => {
         setIcsCreationError(null);
         const formData = new FormData();
         formData.append('ics', icsFile, `${state.title}.ics`);
-        const myReader = new FileReader();
-        myReader.onload = (event) => {
-            console.log(JSON.stringify(myReader.result));
-        };
-        myReader.readAsText(icsFile);
+
         axios
             .post(`${process.env.SERVER_HOST}/ics/file`, formData, {
                 headers: {
