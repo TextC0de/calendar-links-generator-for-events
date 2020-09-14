@@ -10,7 +10,6 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import DateTimePicker from 'react-datetime-picker';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { reducer, initialState, actions } from '../reducers/form';
 import CalendarLink from '../components/CalendarLink';
 
@@ -131,8 +130,8 @@ const IndexPage = () => {
                 <Container>
                     <h1 className="text-center">Generador de links para añadir a calendarios</h1>
                     <p className="text-center text-muted">
-                        Crea un evento y obten los links para añadirlo a calendarios de Google,
-                        Outlook, Microsoft365, Yahoo y Apple.
+                        Obten los links para agregar un evento a los calendarios de Google, Outlook,
+                        Microsoft365, Yahoo, Apple, etc.
                     </p>
                     <Row>
                         <Col md={6} style={{ paddingTop: '3rem' }}>
@@ -259,38 +258,15 @@ const IndexPage = () => {
                                             copiedCalendar={state.copiedCalendar}
                                             onCopy={() => onGeneratedLinkCopy('yahoo')}
                                         />
-                                        <p>Archivo .ics para calendarios como el de Apple</p>
-                                        <Button
-                                            size="sm"
-                                            variant="outline-primary"
-                                            onClick={onDownloadIcsClick}
-                                        >
-                                            Descargar ICS
-                                        </Button>
-                                        {'  '}
 
-                                        {icsWasCreated && (
-                                            <div style={{ display: 'inline-block' }}>
-                                                <CopyToClipboard
-                                                    text={icsLink}
+                                        {!creatingIcs && icsWasCreated && (
+                                            <div style={{ marginTop: '0.5rem' }}>
+                                                <CalendarLink
+                                                    calendarName="Ics"
+                                                    addToCalendarLink={icsLink}
+                                                    copiedCalendar={state.copiedCalendar}
                                                     onCopy={() => onGeneratedLinkCopy('ics')}
-                                                >
-                                                    <Button variant="outline-primary" size="sm">
-                                                        <span>Copiar link al ICS</span>
-                                                    </Button>
-                                                </CopyToClipboard>
-                                                {'  '}
-                                                {state.copiedCalendar.toLowerCase() === 'ics' && (
-                                                    <small
-                                                        style={{
-                                                            textTransform: 'uppercase',
-                                                            fontWeight: 600,
-                                                            color: '#6c757d'
-                                                        }}
-                                                    >
-                                                        Copiado
-                                                    </small>
-                                                )}
+                                                />
                                             </div>
                                         )}
 
@@ -312,6 +288,18 @@ const IndexPage = () => {
                                                 Hubo un error al crear el link al archivo .ics
                                             </Alert>
                                         )}
+
+                                        <p style={{ margin: '1rem 0 0 0' }}>
+                                            Archivo .ics para calendarios (Apple/iOS)
+                                        </p>
+                                        <Button
+                                            size="sm"
+                                            variant="outline-primary"
+                                            onClick={onDownloadIcsClick}
+                                        >
+                                            Descargar ICS
+                                        </Button>
+                                        {'  '}
                                     </div>
                                 ) : (
                                     <span className="muted-text">
