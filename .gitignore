@@ -4,6 +4,7 @@ node_modules
 
 public/*
 !public/.gitignore
+!public/assets
 
 build/
 node_modules/

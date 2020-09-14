@@ -314,7 +314,23 @@ const IndexPage = () => {
 
             <footer className="text-center mt-5 mb-5">
                 <span>
-                    Por <a href="https://github.com/TextC0de">Ignacio Guzmán</a>.
+                    <a
+                        href="https://github.com/TextC0de/calendar-links-generator-for-events"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Proyecto
+                    </a>{' '}
+                    <img
+                        style={{ width: '1rem', height: '1rem' }}
+                        src={`${process.env.SERVER_HOST}/files/assets/github.svg`}
+                        alt="Github icon"
+                    />{' '}
+                    por{' '}
+                    <a href="https://github.com/TextC0de" target="_blank" rel="noreferrer">
+                        Ignacio Guzmán
+                    </a>
+                    .
                 </span>
             </footer>
         </div>
