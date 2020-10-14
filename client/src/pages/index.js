@@ -1,6 +1,7 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import ReactGA, { GAevent } from 'react-ga';
 import { google, outlook, office365, yahoo, ics } from 'calendar-link';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -27,6 +28,11 @@ const IndexPage = () => {
     const [startDate, onStartDateChange] = useState(new Date());
     const [endDate, onEndDateChange] = useState(new Date());
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        ReactGA.initialize(`${process.env.ANALITYCS_ID}`);
+        ReactGA.pageview('calendar-links-generator');
+    }, []);
 
     const formIsValid = () =>
         state.title &&
@@ -110,13 +116,17 @@ const IndexPage = () => {
                 ics: icsFile
             })
         );
+
+        GAevent('Calendar Links Generator', 'Event generated');
     };
 
     const onGeneratedLinkCopy = (linkName) => {
         dispatch(actions.onLinkCopy(linkName));
+        GAevent('Calendar Links Generator', `${linkName} copy`);
     };
 
     const onDownloadIcsClick = () => {
+        GAevent('Calendar Links Generator', 'Download ICS Click');
         const element = document.createElement('a');
         element.href = URL.createObjectURL(state.icsFile);
         element.download = `${state.title}.ics`;
@@ -126,13 +136,8 @@ const IndexPage = () => {
 
     return (
         <div className="home-page">
-            <main style={{ padding: '3rem 0' }}>
+            <main style={{ paddingBottom: '3rem' }}>
                 <Container>
-                    <h1 className="text-center">Generador de links para añadir a calendarios</h1>
-                    <p className="text-center text-muted">
-                        Obten los links para agregar un evento a los calendarios de Google, Outlook,
-                        Microsoft365, Yahoo, Apple, etc.
-                    </p>
                     <Row>
                         <Col md={6} style={{ paddingTop: '3rem' }}>
                             <section>
